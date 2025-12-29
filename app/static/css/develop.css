@@ -1,0 +1,12 @@
+#content-wrapper.develop-page {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+    height: 100% !important;
+}
+
+#content-wrapper.develop-page > div.flex.flex-col {
+    flex: 1 !important;
+    min-height: 0 !important;
+}
+

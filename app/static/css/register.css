@@ -1,0 +1,24 @@
+body {
+    overflow: hidden;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.register-step { 
+    display: none; 
+}
+
+.register-step.active { 
+    display: block; 
+}
+
+.register-step.animate { 
+    animation: fadeIn 0.3s ease; 
+}
+
+.step-dot.active { 
+    transform: scale(1.3); 
+}

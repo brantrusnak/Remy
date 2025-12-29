@@ -1,0 +1,11 @@
+#content-wrapper:has(.settings-layout) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.settings-layout {
+    flex: 1;
+    min-height: 0;
+}
+

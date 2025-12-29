@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}{{ recipe.title }} - Remy{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/view.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="view-layout{% if versions|length > 1 %} has-versions{% endif %}">
+    <div class="min-h-0 h-full bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+        <div class="p-6 pb-4 flex items-start justify-between gap-4 border-b border-gray-100 shrink-0">
+            <div class="flex-1 min-w-0">
+                <h1 id="recipe-title" class="text-3xl font-bold text-gray-900 leading-tight">{{ recipe.title }}</h1>
+                <p id="recipe-description" class="mt-2 text-lg text-gray-600 {% if not recipe.description %}hidden{% endif %}">{{ recipe.description or '' }}</p>
+            </div>
+
+            <div class="flex items-center gap-1 no-print shrink-0">
+                <a id="edit-link" href="{{ url_for('recipes.edit_recipe', recipe_id=recipe.id) }}" 
+                   class="recipe-action-btn group" title="Edit recipe">
+                    <svg class="w-5 h-5 text-gray-500 group-hover:text-[#c47a5a] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                </a>
+                <button id="print-btn" class="recipe-action-btn group" title="Print recipe">
+                    <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                    </svg>
+                </button>
+                <button id="delete-btn" data-recipe-id="{{ recipe.id }}" data-recipe-title="{{ recipe.title }}" 
+                        class="recipe-action-btn group" title="Delete recipe">
+                    <svg class="w-5 h-5 text-gray-500 group-hover:text-red-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="p-6 overflow-y-auto flex-1">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-3">Ingredients</h2>
+                    <div id="recipe-ingredients" class="prose max-w-none whitespace-pre-line text-gray-700">{{ recipe.ingredients }}</div>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-3">Instructions</h2>
+                    <div id="recipe-steps" class="prose max-w-none whitespace-pre-line text-gray-700">{{ recipe.steps }}</div>
+                </div>
+            </div>
+
+            <div id="recipe-tips-section" class="mt-8 p-4 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-lg {% if not recipe.tips %}hidden{% endif %}">
+                <h2 class="text-lg font-semibold text-gray-900 mb-3">Tips</h2>
+                <div id="recipe-tips" class="prose max-w-none whitespace-pre-line text-gray-700">{{ recipe.tips or '' }}</div>
+            </div>
+        </div>
+    </div>
+
+    {% if versions|length > 1 %}
+    <div class="min-h-0 h-full bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col no-print">
+        <div class="p-4 border-b border-gray-100 shrink-0">
+            <h2 class="text-lg font-semibold text-gray-900">Version History</h2>
+        </div>
+        <div class="p-4 overflow-y-auto flex-1">
+            <div id="versions-list" class="space-y-2">
+                {% for version in versions %}
+                <div class="version-item p-3 border border-gray-200 rounded-md cursor-pointer transition-all duration-150 ease-in-out hover:bg-gray-50 hover:border-gray-300{% if loop.first %} active{% endif %}" 
+                     data-version-id="{{ version.id }}">
+                    <div class="text-sm font-medium text-gray-900">v{{ version.version_number }}</div>
+                    <div class="text-xs text-gray-500 truncate">{{ version.title }}</div>
+                    <div class="text-xs text-gray-400 mt-1">{{ version.created_at.strftime('%b %d, %Y') }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script id="recipe-data" type="application/json">
+{
+    "id": {{ recipe.id }},
+    "title": {{ recipe.title | tojson }},
+    "description": {{ (recipe.description or '') | tojson }},
+    "ingredients": {{ recipe.ingredients | tojson }},
+    "steps": {{ recipe.steps | tojson }},
+    "tips": {{ (recipe.tips or '') | tojson }}
+}
+</script>
+<script src="{{ url_for('static', filename='js/view.js') }}"></script>
+{% endblock %}

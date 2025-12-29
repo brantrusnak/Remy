@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Remy{% endblock %}</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/toast.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen">
+    {% if current_user.is_authenticated %}
+        <div class="flex h-screen">
+            <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
+                <div class="p-4 border-b border-gray-200">
+                    <a href="{{ url_for('main.index') }}" class="w-full px-4 py-2 bg-[#c47a5a] text-white rounded-md hover:bg-[#b36a4a] focus:outline-none focus:ring-2 focus:ring-[#c47a5a] focus:ring-offset-2 text-sm font-medium text-center block">
+                        Create New Recipe
+                    </a>
+                </div>
+
+                <div class="flex-1 overflow-y-auto flex flex-col">
+                    <div class="p-4 pb-2">
+                        <div class="relative">
+                            <input type="text" 
+                                   id="sidebar-search" 
+                                   placeholder="Search recipes..." 
+                                   class="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#c47a5a] focus:border-[#c47a5a]">
+                            <svg class="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="px-4 pb-4 flex-1 overflow-y-auto">
+                        <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">My Recipes</h2>
+                        <div id="sidebar-recipes-list" class="space-y-1">
+                            <p class="text-sm text-gray-500">Loading recipes...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 border-t border-gray-200">
+                    <div class="relative" id="user-menu-container">
+                        <button type="button" id="user-menu-button" class="w-full flex items-center gap-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#c47a5a] focus:ring-offset-2 rounded-lg p-2.5 bg-gray-50 hover:bg-gray-100 transition-colors group">
+                            <img src="https://ui-avatars.com/api/?name={{ current_user.username }}&background=c47a5a&color=fff&size=32" 
+                                 alt="{{ current_user.username }}" 
+                                 class="h-9 w-9 rounded-full flex-shrink-0 ring-2 ring-white shadow-sm">
+                            <span class="flex-1 text-left">
+                                <span class="block text-gray-900 font-medium truncate">{{ current_user.username }}</span>
+                                <span class="block text-xs text-gray-500">View options</span>
+                            </span>
+                            <svg class="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                            </svg>
+                        </button>
+                        <div id="user-menu-dropdown" class="hidden absolute bottom-full left-0 right-0 mb-2 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 overflow-hidden">
+                            <div class="py-1">
+                                <a href="{{ url_for('pantry.pantry_page') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 6v14h16V6M4 6l2-4h12l2 4M9 6v14M15 6v14M4 10h5M15 10h5M4 14h5M15 14h5"/>
+                                    </svg>
+                                    My Pantry
+                                </a>
+                                <a href="{{ url_for('settings.settings_page') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    Settings
+                                </a>
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                    </svg>
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="flex-1 overflow-y-auto">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div data-flash-message="{{ message }}" data-flash-category="{{ category }}" style="display: none;"></div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <div class="px-4 sm:px-6 lg:px-8 py-8" id="content-wrapper">
+                </div>
+            </main>
+        </div>
+    {% else %}
+        <nav class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="{{ url_for('main.index') }}" class="text-lg font-semibold text-gray-900">🐭Remy</a>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="{{ url_for('auth.login') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#c47a5a] hover:bg-[#b36a4a]">Login</a>
+                        <a href="{{ url_for('auth.register') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Register</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div data-flash-message="{{ message }}" data-flash-category="{{ category }}" style="display: none;"></div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <main id="content-wrapper">
+        </main>
+    {% endif %}
+    
+    <div data-content-block style="display: none;">
+        {% block content %}{% endblock %}
+    </div>
+    
+    
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/toast.js') }}"></script>
+    {% block scripts %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+</body>
+</html>

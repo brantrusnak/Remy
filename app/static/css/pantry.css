@@ -1,0 +1,24 @@
+#content-wrapper:has(.pantry-layout) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.pantry-layout {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 1.5rem;
+}
+
+.pantry-items-card {
+    min-height: 0;
+    height: 100%;
+}
+
+.stock-up-card {
+    min-height: 0;
+    height: 100%;
+}
+

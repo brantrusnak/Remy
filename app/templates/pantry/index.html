@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}My Pantry - Remy{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pantry.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="pantry-layout">
+    <div class="pantry-items-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+        <div class="p-6 border-b border-gray-100 shrink-0">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Your Ingredients</h1>
+                    <p class="text-gray-500 text-sm">Keep track of what's in your kitchen</p>
+                </div>
+                <span id="item-count" class="text-sm text-gray-500"></span>
+            </div>
+        </div>
+        <div class="p-6 overflow-y-auto flex-1">
+            <div id="pantry-items-list">
+                <p class="text-gray-500 text-sm">Loading items...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="stock-up-card bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg shadow-sm border border-amber-100 overflow-hidden flex flex-col">
+        <div class="p-4 border-b border-amber-100 shrink-0">
+            <h2 class="text-lg font-semibold text-gray-900">Stock Up</h2>
+            <p class="text-xs text-gray-600">Add ingredients separated by commas or new lines</p>
+        </div>
+        <div class="p-4 flex-1 flex flex-col">
+            <form id="add-pantry-form" class="flex flex-col flex-1">
+                <textarea 
+                    id="add-pantry-input" 
+                    name="items" 
+                    placeholder="eggs, milk, butter, olive oil, garlic, onions..."
+                    class="w-full flex-1 px-3 py-2 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#c47a5a] focus:border-[#c47a5a] mb-3 bg-white resize-none text-sm"
+                    required></textarea>
+                <button type="submit" id="add-pantry-btn" class="w-full px-4 py-2 bg-[#c47a5a] text-white rounded-lg hover:bg-[#b36a4a] focus:outline-none focus:ring-2 focus:ring-[#c47a5a] focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed font-medium transition-colors text-sm">
+                    Add to Pantry
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/pantry.js') }}"></script>
+{% endblock %}

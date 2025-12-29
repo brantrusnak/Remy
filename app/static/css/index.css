@@ -1,0 +1,28 @@
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(196, 122, 90, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(196, 122, 90, 0.5); }
+}
+
+.float-animation {
+    animation: float 3s ease-in-out infinite;
+}
+
+.glow-animation {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #c47a5a 0%, #a65d42 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-gradient {
+    background: linear-gradient(135deg, #fdf8f6 0%, #f5ebe7 100%);
+}

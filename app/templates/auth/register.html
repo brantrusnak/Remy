@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Remy{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="h-[calc(100vh-64px)] flex items-center justify-center px-8 overflow-y-auto">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden">
+        <div class="bg-gradient-to-br from-[#c47a5a] to-[#a65d42] px-8 py-6 text-center">
+            <div class="text-4xl mb-1">🐭</div>
+            <h1 id="header-title" class="text-white text-2xl font-bold">Join Remy</h1>
+            <p id="header-subtitle" class="text-white/85 text-sm mt-1">Create your account</p>
+        </div>
+        
+        <div class="px-8 py-6">
+            <div class="flex justify-center gap-2 mb-5">
+                <div class="step-dot w-2 h-2 rounded-full bg-[#c47a5a] transition-all duration-300 active" data-step="1"></div>
+                <div class="step-dot w-2 h-2 rounded-full bg-gray-200 transition-all duration-300" data-step="2"></div>
+                <div class="step-dot w-2 h-2 rounded-full bg-gray-200 transition-all duration-300" data-step="3"></div>
+            </div>
+            
+            <div class="register-step active" data-step="1">
+                <form id="register-form">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="username">Username</label>
+                        <input type="text" id="username" name="username" 
+                            class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#c47a5a] focus:ring-2 focus:ring-[#c47a5a]/20" 
+                            required autocomplete="off">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="password">Password</label>
+                        <input type="password" id="password" name="password" 
+                            class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#c47a5a] focus:ring-2 focus:ring-[#c47a5a]/20" 
+                            required minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="confirm_password">Confirm Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" 
+                            class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#c47a5a] focus:ring-2 focus:ring-[#c47a5a]/20" 
+                            required minlength="6" autocomplete="new-password">
+                    </div>
+                    <button type="submit" id="register-btn" 
+                        class="w-full py-3 px-4 bg-gradient-to-br from-[#c47a5a] to-[#a65d42] text-white font-medium rounded-lg hover:shadow-lg hover:shadow-[#c47a5a]/30 hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
+                        Create Account
+                    </button>
+                </form>
+                <div class="text-center mt-4 pt-4 border-t border-gray-200 text-sm text-gray-600">
+                    Already have an account? <a href="{{ url_for('auth.login') }}" class="text-[#c47a5a] font-medium hover:underline">Login</a>
+                </div>
+            </div>
+            
+            <div class="register-step" data-step="2">
+                <p class="text-base font-semibold text-gray-700 mb-4 text-center">Set Your Dietary Preferences</p>
+                <form id="preferences-form">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="diet-type">Diet Type</label>
+                        <select id="diet-type" name="diet_type" 
+                            class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#c47a5a] focus:ring-2 focus:ring-[#c47a5a]/20">
+                            <option value="omnivore">Omnivore - I eat everything</option>
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="vegan">Vegan</option>
+                            <option value="pescatarian">Pescatarian</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="foods-to-avoid">Foods to Avoid</label>
+                        <p class="text-xs text-gray-400 mb-1">Allergies or dislikes, comma-separated</p>
+                        <textarea id="foods-to-avoid" name="foods_to_avoid" 
+                            class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#c47a5a] focus:ring-2 focus:ring-[#c47a5a]/20 resize-y min-h-[70px]" 
+                            placeholder="nuts, shellfish, dairy..."></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="foods-i-love">Foods You Love</label>
+                        <textarea id="foods-i-love" name="foods_i_love" 
+                            class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#c47a5a] focus:ring-2 focus:ring-[#c47a5a]/20 resize-y min-h-[70px]" 
+                            placeholder="pasta, chocolate, avocados..."></textarea>
+                    </div>
+                    <button type="submit" id="save-prefs-btn" 
+                        class="w-full py-3 px-4 bg-gradient-to-br from-[#c47a5a] to-[#a65d42] text-white font-medium rounded-lg hover:shadow-lg hover:shadow-[#c47a5a]/30 hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none">
+                        Continue
+                    </button>
+                </form>
+                <a id="skip-prefs" class="block text-center mt-3 text-gray-400 text-xs cursor-pointer hover:text-gray-600 hover:underline">Set up later</a>
+            </div>
+            
+            <div class="register-step" data-step="3">
+                <p class="text-base font-semibold text-gray-700 mb-4 text-center">What's in Your Kitchen?</p>
+                <form id="pantry-form">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="pantry-items">Your Ingredients</label>
+                        <p class="text-xs text-gray-400 mb-1">Enter items separated by commas</p>
+                        <textarea id="pantry-items" name="pantry_items" rows="5"
+                            class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#c47a5a] focus:ring-2 focus:ring-[#c47a5a]/20 resize-y min-h-[70px]" 
+                            placeholder="rice, eggs, flour, milk, chicken, tomatoes, onions, garlic..."></textarea>
+                    </div>
+                    <div class="flex gap-3">
+                        <button type="button" id="back-to-prefs" 
+                            class="py-3 px-4 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-all">
+                            ← Back
+                        </button>
+                        <button type="submit" id="finish-btn" 
+                            class="flex-1 py-3 px-4 bg-gradient-to-br from-[#c47a5a] to-[#a65d42] text-white font-medium rounded-lg hover:shadow-lg hover:shadow-[#c47a5a]/30 hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none">
+                            Start Cooking!
+                        </button>
+                    </div>
+                </form>
+                <a id="skip-pantry" class="block text-center mt-3 text-gray-400 text-xs cursor-pointer hover:text-gray-600 hover:underline">Set up later</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+{% endblock %}

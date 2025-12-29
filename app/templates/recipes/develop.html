@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Develop Recipe - Remy{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/develop.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col h-full">
+    <div class="flex items-center gap-4 mb-6 flex-shrink-0">
+        {% if edit_recipe %}
+        <a id="back-link" href="{{ url_for('main.view_recipe', recipe_id=edit_recipe.recipe_id if edit_recipe.recipe_id else edit_recipe.id) }}{% if edit_version_id %}?version_id={{ edit_version_id }}{% endif %}" 
+           class="inline-flex items-center text-gray-500 hover:text-gray-700 transition-colors" title="Back to recipe">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+        </a>
+        {% endif %}
+        <h1 class="text-3xl font-bold text-gray-900">{% if edit_recipe %}Edit Recipe{% else %}Develop Recipe{% endif %}</h1>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
+        <div id="recipe-card" class="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 p-6 relative flex flex-col min-h-0">
+            <div id="loading-overlay" class="hidden absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-10 rounded-lg">
+                <div class="flex flex-col items-center">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#c47a5a]"></div>
+                    <p class="mt-4 text-gray-600">Generating recipe...</p>
+                </div>
+            </div>
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Recipe</h2>
+            <div id="recipe-content" class="text-gray-600 flex-1 overflow-y-auto">
+                <p>Start a conversation to generate a recipe...</p>
+            </div>
+        </div>
+        <div class="flex flex-col space-y-6 min-h-0">
+            <div id="chat-pane" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col min-h-0 flex-1">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Conversation</h2>
+                <div id="chat-messages" class="mb-4 flex-1 overflow-y-auto border border-gray-200 rounded-md p-4 bg-gray-50 min-h-0"></div>
+                <div id="input-bar" class="flex gap-2 flex-shrink-0">
+                    <input type="text" id="user-input" placeholder="What are you in the mood for?" 
+                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#c47a5a] focus:border-[#c47a5a]">
+                    <button type="button" id="send-button" class="px-4 py-2 bg-[#c47a5a] text-white rounded-md hover:bg-[#b36a4a] focus:outline-none focus:ring-2 focus:ring-[#c47a5a] focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                        Send
+                    </button>
+                </div>
+            </div>
+            <div id="version-history" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex flex-col min-h-0 max-h-[33%]">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4 flex-shrink-0">Version History</h2>
+                <div id="versions-list" class="space-y-2 overflow-y-auto flex-1 min-h-0"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/develop.js') }}"></script>
+{% if edit_recipe %}
+<script id="edit-recipe-data" type="application/json">
+{
+    "id": {{ edit_recipe.id }},
+    "recipe_id": {{ edit_recipe.recipe_id if edit_recipe.recipe_id else edit_recipe.id }},
+    "title": {{ edit_recipe.title|tojson }},
+    "description": {{ edit_recipe.description|tojson }},
+    "ingredients": {{ edit_recipe.ingredients|tojson }},
+    "steps": {{ edit_recipe.steps|tojson }},
+    "tips": {{ edit_recipe.tips|tojson }}
+}
+</script>
+{% endif %}
+{% endblock %}
